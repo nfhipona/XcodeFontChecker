@@ -7,6 +7,7 @@
 * Quick summary
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* [Sample Video](https://youtu.be/JZ-fMyq1ito)
 
 ### How do I get set up? ###
 
