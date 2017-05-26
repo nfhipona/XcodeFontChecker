@@ -156,7 +156,8 @@
     
     // set default font
     self.activeFont = [UIFont systemFontOfSize:16.0];
-
+    self.inputField.font = self.activeFont;
+    
     [self.fontTableView reloadData];
     [self.subFontTableView reloadData];
 }
@@ -165,14 +166,20 @@
     
     // get font list for this family name
     NSArray *fontList = [UIFont fontNamesForFamilyName:familyName];
+    NSMutableArray *fontListTmp = [@[] mutableCopy];
     
-    if (fontList.count > 0) {
+    for (NSString *fontName in fontList) {
+        UIFont *font = [UIFont fontWithName:fontName size:16.0];
+        [fontListTmp addObject:font];
+    }
+    
+    if (fontListTmp.count > 0) {
         NSLog(@"\n\nAvailable fonts for this family name: %@\n\n", fontList);
     }else{
         NSLog(@"\n\nFont not supported.");
     }
     
-    return fontList;
+    return fontListTmp;
 }
 
 #pragma mark - UITableViewDataSource
@@ -202,18 +209,24 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *fontName = tableView.tag == 0 ? self.fontCollections[indexPath.row] : self.subFontCollections[indexPath.row];
-    
     FontInfoTableViewCell *fontInfoCell = (FontInfoTableViewCell *)cell;
-    fontInfoCell.titleLabel.text = fontName;
+    
+    if (tableView.tag == 0) {
+        NSString *fontName = self.fontCollections[indexPath.row];
+        fontInfoCell.titleLabel.text = fontName;
+        fontInfoCell.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    }else{
+        UIFont *font = self.subFontCollections[indexPath.row];
+        fontInfoCell.titleLabel.text = font.fontName;
+        fontInfoCell.titleLabel.font = font;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *fontName = tableView.tag == 0 ? self.fontCollections[indexPath.row] : self.subFontCollections[indexPath.row];
-
     if (tableView.tag == 0) {
+        NSString *fontName = self.fontCollections[indexPath.row];
         self.navigationItem.title = fontName;
         
         self.subFontCollections = [self fontsForFamilyName:fontName];
@@ -224,7 +237,7 @@
         }
     }else{
 
-        self.activeFont = [UIFont fontWithName:fontName size:[self.fontSizeField.text floatValue]];
+        self.activeFont = self.subFontCollections[indexPath.row];
         self.inputField.font = self.activeFont;
     }
 }
