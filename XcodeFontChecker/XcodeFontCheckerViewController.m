@@ -238,7 +238,8 @@
         }
     }else{
 
-        self.activeFont = self.subFontCollections[indexPath.row];
+        UIFont *font = self.subFontCollections[indexPath.row];
+        self.activeFont = [self fontWithFontName:font.fontName fontSize:[self.fontSizeField.text floatValue]];
         self.inputField.font = self.activeFont;
     }
 }
