@@ -157,6 +157,7 @@
     // set default font
     self.activeFont = [UIFont systemFontOfSize:16.0];
     self.inputField.font = self.activeFont;
+    self.fontSizeField.text = @"16.0";
     
     [self.fontTableView reloadData];
     [self.subFontTableView reloadData];
